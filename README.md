@@ -1,5 +1,7 @@
 # 拾月 · Gather the Moon
 
+**在线试玩：<https://dososo.github.io/shiyue/>**　·　[一分钟演示视频](media/shiyue-demo.mp4)
+
 一款在浏览器里玩的治愈系等距视错觉解谜小游戏。月亮碎成六瓣，落进六座沉睡的庭院；小兔团团提着灯，一瓣一瓣送回天上。
 
 - 六章完整流程，约 15–25 分钟
@@ -106,6 +108,9 @@ js/gfx.js             WebGL 渲染器与几何生成
 js/audio.js           程序化配乐与音效
 js/game.js            主循环、建模、交互、演出、界面
 tools/solve.js        关卡求解器
+tools/record-demo.js  演示视频素材录制（需 playwright 与 ffmpeg，仅制作视频时用）
+tools/cut-demo.js     把素材剪成成片
+media/                演示视频
 docs/verification/    验证报告与证据
 ```
 

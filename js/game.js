@@ -619,5 +619,5 @@
   // 调试/自动化验证入口(不影响游玩)
   window.__sy = { S: S, P: P, start: start, proj: proj, tick: function (sec) { for (var i = 0; i < sec * 60; i++) update(1 / 60); render(); drawFX(0); return S.mode; },
     walk: function (x, y, z) { var n = S.world.nodes.filter(function (n) { return n.active && n.cell[0] === x && n.cell[1] === y && n.cell[2] === z; })[0]; if (!n) return 'no node'; var p = L.path(P.node, n); if (!p) return 'no path'; P.path = p; return p.length; },
-    set: function (id, st) { var p = S.world.byId[id]; if (L.locked(p, P.node)) return 'locked'; animPart(p, st, 0.4, ease); return 'ok'; } };
+    set: function (id, st, dur) { var p = S.world.byId[id]; if (L.locked(p, P.node)) return 'locked'; animPart(p, st, dur || 0.4, ease); return 'ok'; } };
 })();
