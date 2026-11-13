@@ -14,6 +14,7 @@ const { chromium } = require('playwright');
 const OUT = path.resolve(process.argv[2] || 'rec');
 const BASE = process.argv[3] || 'http://127.0.0.1:8791';
 const W = 1280, H = 720;
+const HQ = !!process.env.HQ; // 高清模式:CDP 截屏流逐帧存 JPEG(1920x1080),不走 Playwright 自带的低码率录像
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 const TAP = () => {
@@ -64,9 +65,23 @@ const TAP = () => {
   })();
 
   // ── 画面 ──
-  const ctx = await browser.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: 2, recordVideo: { dir: OUT, size: { width: W, height: H } } });
+  const ctx = await browser.newContext(HQ
+    ? { viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 } // 截屏流按 CSS 像素出帧,所以直接用 1080p 视口
+    : { viewport: { width: W, height: H }, deviceScaleFactor: 2, recordVideo: { dir: OUT, size: { width: W, height: H } } });
   const page = await ctx.newPage();
-  const t0 = Date.now();
+  let t0 = Date.now(); const startWall = t0;
+  const frames = []; let cdp = null;
+  if (HQ) {
+    fs.mkdirSync(path.join(OUT, 'frames'), { recursive: true });
+    cdp = await ctx.newCDPSession(page);
+    cdp.on('Page.screencastFrame', f => {
+      const name = 'f' + String(frames.length).padStart(6, '0') + '.jpg';
+      frames.push({ name, ts: f.metadata.timestamp });
+      fs.writeFile(path.join(OUT, 'frames', name), Buffer.from(f.data, 'base64'), () => { });
+      cdp.send('Page.screencastFrameAck', { sessionId: f.sessionId }).catch(() => { });
+    });
+    await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 96, maxWidth: 1920, maxHeight: 1080, everyNthFrame: 1 });
+  }
   const marks = [];
   const now = () => (Date.now() - t0) / 1000;
   const seg = async (name, fn) => { const a = now(); await fn(); marks.push({ name, in: a, out: now() }); console.log(name, (now() - a).toFixed(2) + 's'); };
@@ -167,10 +182,21 @@ const TAP = () => {
   await mode('final'); await sleep(700);
   await seg('finale', () => sleep(5200));
 
-  const video = page.video();
-  await ctx.close();
-  const raw = path.join(OUT, 'raw.webm');
-  fs.renameSync(await video.path(), raw);
+  if (HQ) {
+    await cdp.send('Page.stopScreencast'); await sleep(500); await ctx.close();
+    // 帧时间戳与 marks 用同一个墙钟;以第一帧为零点,写成 ffconcat 清单
+    const f0 = frames[0].ts; t0 = f0 * 1000 - 0; const shift = (f0 * 1000 - startWall) / 1000;
+    marks.forEach(m => { m.in -= shift; m.out -= shift; });
+    const lines = ['ffconcat version 1.0'];
+    frames.forEach((f, i) => { lines.push('file frames/' + f.name); lines.push('duration ' + Math.max(0.001, ((frames[i + 1] || { ts: f.ts + 0.04 }).ts - f.ts)).toFixed(4)); });
+    lines.push('file frames/' + frames[frames.length - 1].name);
+    fs.writeFileSync(path.join(OUT, 'frames.txt'), lines.join('\n'));
+    console.log('frames', frames.length, 'avg fps', (frames.length / (frames[frames.length - 1].ts - f0)).toFixed(1));
+  } else {
+    const video = page.video();
+    await ctx.close();
+    fs.renameSync(await video.path(), path.join(OUT, 'raw.webm'));
+  }
   const audioState = await music;
   await browser.close();
   fs.writeFileSync(path.join(OUT, 'marks.json'), JSON.stringify({ fps, audioState, marks }, null, 2));

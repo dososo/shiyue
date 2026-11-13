@@ -51,7 +51,7 @@
       });
     });
     var top = 84, bot = 96, side = 28;
-    var ppu = Math.max(6, Math.min((W - side * 2) / (mx[0] - mn[0]), (H - top - bot) / (mx[1] - mn[1]), 76)); // 极小窗口下也保持为正
+    var ppu = Math.max(6, Math.min((W - side * 2) / (mx[0] - mn[0]), (H - top - bot) / (mx[1] - mn[1]), 76 * Math.max(1, Math.min(W, H) / 720))); // 大屏按比例放宽上限 // 极小窗口下也保持为正
     var cu = (mn[0] + mx[0]) / 2, cv = (mn[1] + mx[1]) / 2;
     S.cam.c = [RX[0] * cu + UY[0] * cv, UY[1] * cv, RX[2] * cu + UY[2] * cv];
     S.cam.ppu = ppu; S.cam.base = (top - bot) / 2;
@@ -240,7 +240,7 @@
     bg.fillStyle = g; bg.fillRect(0, 0, W, H);
     if (pal.night) { var r = rnd(S.idx + 3); for (i = 0; i < 110; i++) { var x = r() * W, y = r() * H * 0.7, rr = 0.4 + r() * 1.1; bg.fillStyle = 'rgba(255,250,235,' + (0.25 + r() * 0.55) + ')'; bg.beginPath(); bg.arc(x, y, rr, 0, 6.2832); bg.fill(); } }
     // 月
-    var mr = clamp(Math.min(W, H) * 0.055, 22, 52), mx = W * (S.def.moonX || (W > H ? 0.8 : 0.76)), my = H * (W > H ? 0.2 : 0.16), f = S.moon.phase;
+    var mr = clamp(Math.min(W, H) * 0.055, 22, 52 * Math.max(1, Math.min(W, H) / 720)), mx = W * (S.def.moonX || (W > H ? 0.8 : 0.76)), my = H * (W > H ? 0.2 : 0.16), f = S.moon.phase;
     S.moon.x = mx; S.moon.y = my; S.moon.r = mr;
     g = bg.createRadialGradient(mx, my, mr * 0.6, mx, my, mr * 3.6); g.addColorStop(0, 'rgba(255,246,214,' + (0.1 + 0.32 * f) + ')'); g.addColorStop(1, 'rgba(255,246,214,0)');
     bg.fillStyle = g; bg.fillRect(mx - mr * 4, my - mr * 4, mr * 8, mr * 8);
