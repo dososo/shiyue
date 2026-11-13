@@ -51,7 +51,7 @@
       });
     });
     var top = 84, bot = 96, side = 28;
-    var ppu = Math.min((W - side * 2) / (mx[0] - mn[0]), (H - top - bot) / (mx[1] - mn[1]), 76);
+    var ppu = Math.max(6, Math.min((W - side * 2) / (mx[0] - mn[0]), (H - top - bot) / (mx[1] - mn[1]), 76)); // 极小窗口下也保持为正
     var cu = (mn[0] + mx[0]) / 2, cv = (mn[1] + mx[1]) / 2;
     S.cam.c = [RX[0] * cu + UY[0] * cv, UY[1] * cv, RX[2] * cu + UY[2] * cv];
     S.cam.ppu = ppu; S.cam.base = (top - bot) / 2;
@@ -273,6 +273,7 @@
     for (var i = 0; i < n; i++) S.dust.push({ x: Math.random(), y: Math.random(), r: 0.5 + Math.random(), ph: Math.random() * 6.28, sp: 0.5 + Math.random() });
   }
   function glowDot(x, y, r, col, a) {
+    if (!(r > 0.5)) return;
     var g = fx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, rgba(col, a)); g.addColorStop(1, rgba(col, 0));
     fx.fillStyle = g; fx.beginPath(); fx.arc(x, y, r, 0, 6.2832); fx.fill();
   }
@@ -293,7 +294,8 @@
     if (S.mode === 'play') S.world.parts.forEach(function (p) {
       if (!p.handles.length || p.anim || L.locked(p, P.node)) return;
       p.handles.forEach(function (h) {
-        s = proj(L.tPoint(p, p.val, h)); var k = 0.5 + 0.5 * Math.sin(t * 2.2), rr = ppu * (p.def.turtle ? 0.6 : 0.3) * (1 + 0.14 * k);
+        var hw = L.tPoint(p, p.val, h); if (hw[1] < -0.8) return; // 转到下方、被挡住的握钮不提示
+        s = proj(hw); var k = 0.5 + 0.5 * Math.sin(t * 2.2), rr = ppu * (p.def.turtle ? 0.6 : 0.3) * (1 + 0.14 * k);
         fx.strokeStyle = rgba(pal.knob, 0.2 + 0.5 * (1 - k)); fx.lineWidth = 1.5; fx.beginPath(); fx.ellipse(s[0], s[1] + (p.def.turtle ? ppu * 0.12 : 0), rr, rr * (p.def.turtle ? 0.6 : 1), 0, 0, 6.2832); fx.stroke();
       });
     });
@@ -406,7 +408,8 @@
     S.world.parts.forEach(function (p) {
       if (!p.handles.length || p.anim) return;
       p.handles.forEach(function (h) {
-        var s = proj(L.tPoint(p, p.val, h)), d = Math.hypot(x - s[0], y - s[1]), r = Math.max(26, (p.def.turtle ? 0.66 : 0.5) * S.cam.ppu);
+        var hw = L.tPoint(p, p.val, h); if (hw[1] < -0.8) return;
+        var s = proj(hw), d = Math.hypot(x - s[0], y - s[1]), r = Math.max(26, (p.def.turtle ? 0.66 : 0.5) * S.cam.ppu);
         if (d < r && d < bd) { bd = d; best = p; }
       });
     });
