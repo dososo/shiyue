@@ -112,8 +112,9 @@ js/game.js            主循环、建模、交互、演出、界面
 tools/solve.js        关卡求解器
 tools/record-demo.js  演示视频素材录制（需 playwright 与 ffmpeg，仅制作视频时用）
 tools/cut-demo.js     把素材剪成成片（开场即封面帧，不从黑场淡入）
-tools/make-title-overlay.js  生成片头的片名图层
-media/                演示视频与封面图
+tools/make-title-overlay.js  生成片头片名与片尾试玩链接图层
+tools/make-covers.js  生成 16:9 / 4:3 / 3:4 宣传封面(带链接与不带链接各一张)
+media/                演示视频与封面图(covers/ 下为各比例封面)
 docs/verification/    验证报告与证据
 ```
 
