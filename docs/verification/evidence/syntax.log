@@ -1,0 +1,6 @@
+syntax ok js/audio.js
+syntax ok js/game.js
+syntax ok js/gfx.js
+syntax ok js/levels.js
+syntax ok js/logic.js
+syntax ok tools/solve.js

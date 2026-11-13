@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "tool": "tools/solve.js",
+  "generated_at": "2026-11-13T09:18:36.267Z",
+  "all_pass": true,
+  "levels": [
+    {
+      "level": 1,
+      "name": "初醒",
+      "checks": {
+        "SOLVABLE": true,
+        "NO_SOFTLOCK": true,
+        "NO_OVERLAP": true,
+        "RIDER_SAFE": true
+      },
+      "warnings": [],
+      "states": 100,
+      "solution": [
+        "走到 (3,0,1)",
+        "bridge: 1→0",
+        "走到 (4,0,1)",
+        "bridge: 0→2",
+        "走到 (8,1,-2)"
+      ],
+      "rawSteps": 12,
+      "pass": true
+    },
+    {
+      "level": 2,
+      "name": "回廊",
+      "checks": {
+        "SOLVABLE": true,
+        "NO_SOFTLOCK": true,
+        "NO_OVERLAP": true,
+        "RIDER_SAFE": true
+      },
+      "warnings": [],
+      "states": 72,
+      "solution": [
+        "走到 (1,0,0)",
+        "arm: 1→0",
+        "走到 (2,0,0)",
+        "arm: 0→1",
+        "走到 (6,3,5)〔视错觉〕",
+        "走到 (2,4,7)"
+      ],
+      "rawSteps": 12,
+      "pass": true
+    },
+    {
+      "level": 3,
+      "name": "潮汐",
+      "checks": {
+        "SOLVABLE": true,
+        "NO_SOFTLOCK": true,
+        "NO_OVERLAP": true,
+        "RIDER_SAFE": true
+      },
+      "warnings": [],
+      "states": 306,
+      "solution": [
+        "走到 (6,0,6)",
+        "lift1: 2→0",
+        "走到 (5,0,6)",
+        "lift1: 0→2",
+        "走到 (3,2,4)",
+        "lift2: 2→1",
+        "走到 (3,2,3)",
+        "lift2: 1→2",
+        "走到 (3,3,1)",
+        "走到 (2,3,1) 踏板→stones",
+        "走到 (-2,4,-2)"
+      ],
+      "rawSteps": 23,
+      "pass": true
+    },
+    {
+      "level": 4,
+      "name": "相送",
+      "checks": {
+        "SOLVABLE": true,
+        "NO_SOFTLOCK": true,
+        "NO_OVERLAP": true,
+        "RIDER_SAFE": true
+      },
+      "warnings": [],
+      "states": 84,
+      "solution": [
+        "走到 (7,0,6)",
+        "turtle: 3→2",
+        "走到 (5,1,-1)",
+        "turtle: 2→0",
+        "走到 (1,2,-4)"
+      ],
+      "rawSteps": 19,
+      "pass": true
+    },
+    {
+      "level": 5,
+      "name": "霜夜",
+      "checks": {
+        "SOLVABLE": true,
+        "NO_SOFTLOCK": true,
+        "NO_OVERLAP": true,
+        "RIDER_SAFE": true
+      },
+      "warnings": [],
+      "states": 198,
+      "solution": [
+        "走到 (8,0,4)",
+        "wheel: 2→0",
+        "走到 (2,0,5)",
+        "wheel: 0→1",
+        "走到 (0,0,4)",
+        "走到 (-1,0,4) 踏板→gate",
+        "走到 (0,0,1)",
+        "走到 (4,3,4)〔视错觉〕",
+        "走到 (4,4,-4)"
+      ],
+      "rawSteps": 30,
+      "pass": true
+    },
+    {
+      "level": 6,
+      "name": "归月",
+      "checks": {
+        "SOLVABLE": true,
+        "NO_SOFTLOCK": true,
+        "NO_OVERLAP": true,
+        "RIDER_SAFE": true
+      },
+      "warnings": [],
+      "states": 2640,
+      "solution": [
+        "走到 (10,0,8)",
+        "turtle: 2→0",
+        "走到 (7,0,8)",
+        "lift: 3→0",
+        "走到 (6,0,8)",
+        "lift: 0→3",
+        "走到 (5,3,8)",
+        "走到 (5,3,7) 踏板→tower",
+        "走到 (4,3,8)",
+        "arm: 1→0",
+        "走到 (3,3,8)",
+        "arm: 0→3",
+        "走到 (5,6,13)〔视错觉〕",
+        "走到 (4,6,13)",
+        "走到 (4,6,14) 踏板→moonstair",
+        "走到 (3,9,3)"
+      ],
+      "rawSteps": 30,
+      "pass": true
+    }
+  ]
+}
